@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DisBoardDAO">
+
+	<select id="getDisBoardList" resultType="DisBoard">
+		select * from disboard
+		where 1=1
+        <if test="searchType == 'Content'">
+            AND Content like '%${searchKeyword}%'
+        </if>
+        <if test="searchType == 'SuccStory'">
+             AND SuccStory like '%${searchKeyword}%'
+        </if> 
+        <if test="searchType == 'RecoStock'">
+             AND RecoStock like '%${searchKeyword}%'
+        </if> 
+		order by seq desc 
+		limit #{startList}, #{listSize}
+	</select>
+	
+	<select id="getDisBoard" resultType="DisBoard">
+		select * from disboard where seq = #{seq}
+	</select>
+	
+	<select id="getCommentList" resultType="comment">
+		select * from comment where bseq = #{seq} order by cseq desc
+	</select>
+	
+	<select id="getDisBoardListCnt" resultType="paging">
+		select count(*) as listCnt from disboard
+	</select>
+	
+	<insert id="insertDisBoard">
+		insert into
+		disboard(seq,id,content,succStory,recoStock)
+		values((SELECT coalesce(max(seq), 0)+1 FROM disboard a),
+		#{id},#{content},#{succStory},#{recoStock});
+	</insert>
+	
+	<insert id="insertComment">
+		insert into
+		comment(cseq,title,writer,bseq)
+		values((SELECT coalesce(max(cseq), 0)+1 FROM comment a),
+		#{title},#{writer},#{bseq});
+	</insert>
+	
+	<update id="updateCnt">
+		update disboard set cnt = cnt + 1 where seq=#{seq}
+	</update>
+	
+	<update id="updateReplyCnt">
+		update disboard
+		set replycnt = (select count(seq)
+		from comment
+		where comment.bseq = disboard.seq);
+	</update>
+
+</mapper>

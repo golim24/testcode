@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+		
+	<typeAliases>
+		<typeAlias type="com.spring.web.vo.StBoardVO" alias="StBoard" />
+		<typeAlias type="com.spring.web.vo.StResultVO" alias="StResult" />
+		<typeAlias type="com.spring.web.vo.CapVO" alias="KoCapList" />
+		<typeAlias type="com.spring.web.vo.ChartCountVO" alias="ChartCount" />
+		<typeAlias type="com.spring.web.vo.DisBoardVO" alias="DisBoard" />
+		<typeAlias type="com.spring.web.vo.UserVO" alias="user" />
+		<typeAlias type="com.spring.web.vo.PagingVO" alias="paging" />
+		<typeAlias type="com.spring.web.vo.CommentVO" alias="comment" />
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="mappers/StBoardMapper.xml" />
+		<mapper resource="mappers/DisBoardMapper.xml" />
+		<mapper resource="mappers/UserMapper.xml" />
+	</mappers>
+</configuration>

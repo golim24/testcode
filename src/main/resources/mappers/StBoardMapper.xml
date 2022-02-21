@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="StBoardDAO">
+
+	<select id="getStBoardList" resultType="StBoard">
+		select * from stockboard
+	</select>
+	
+	<select id="getMapList" resultType="KoCapList">
+		select * from kosdaqcap order by cap desc limit 200
+	</select>
+	
+	<select id="getMapSnpList" resultType="KoCapList">
+		select * from snp500cap order by cap desc limit 200
+	</select>
+	
+	<select id="getMapSecList" resultType="KoCapList">
+		select distinct sector from kosdaqcap limit 200;
+	</select>
+	
+	<select id="getMapSnpSecList" resultType="KoCapList">
+		select distinct sector from snp500cap limit 200;
+	</select>
+	
+	<select id="getStResultList" resultType="StResult">
+		select * from stockresult 
+		where 1=1
+		and date = (select max(date)from stockresult)
+	</select>
+	
+	<select id="getStResultDayList" resultType="StResult">
+		select date from stockresult where date group by date
+	</select>
+	
+	<select id="getStResultDaySelectList" resultType="StResult">
+		select * from stockresult where date(date) = #{date}
+	</select>
+	
+	<select id="getStResultChartCount" resultType="ChartCount">
+	<![CDATA[ 
+	select
+	count(case when percent>=20 then 1 end) as upthree,
+	count(case when percent>=10 and percent<20 then 1 end) as uptwo,
+	count(case when percent>=0 and percent<10 then 1 end) as upone,
+	count(case when percent<=-20 then 1 end) as downthree,
+	count(case when percent<=-10 and percent>-20 then 1 end) as downtwo,
+	count(case when percent<0 and percent>-10 then 1 end) as downone
+	from stockresult
+	where date between '2022-01-14' and '2022-01-21'
+	]]>
+	</select>
+
+</mapper>
